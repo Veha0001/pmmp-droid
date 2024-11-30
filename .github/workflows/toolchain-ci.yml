@@ -10,7 +10,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-      - run: gh repo clone pmmp/musl-cross-make
+      - run: git clone https://github.com/pmmp/musl-cross-make
       - name: Set up dependencies
         run: |
           sudo apt-get update
@@ -20,8 +20,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            build/
-            .make_cache/
+            ./musl-cross-make/build
+            ./musl-cross-make/.make_cache
           key: ${{ runner.os }}-make-${{ hashFiles('**/Makefile') }}
 
       - name: Create custom config.mak

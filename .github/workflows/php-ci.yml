@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - run: gh repo clone pmmp/PHP-Binaries
+      - run: git clone https://github.com/pmmp/PHP-Binaries
       - name: Install tools and dependencies
         run: |
           sudo apt-get update
