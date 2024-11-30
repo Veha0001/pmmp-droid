@@ -19,11 +19,9 @@ jobs:
       - name: Cache Make
         uses: actions/cache@v4
         with:
-          path: |
-            ./musl-cross-make/build
-            ./musl-cross-make/.make_cache
-          key: ${{ runner.os }}-make-${{ hashFiles('**/Makefile') }}
-
+          path: musl-cross-make
+          key: musl-cross-make-${{ hashFiles('musl-cross-make.hash') }}
+          restore-keys: musl-cross-make-
       - name: Create custom config.mak
         run: |
           cp config.mak.dist config.mak
