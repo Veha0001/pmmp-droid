@@ -1,0 +1,90 @@
+name: Build and Publish PHP Binaries for Android
+
+on:
+  workflow_dispatch:
+    inputs:
+      pm-version:
+        description: "Major PocketMine-MP version specified (can be 4 or 5)"
+        required: true
+        type: string
+      musl-repo:
+        description: "musl-cross-make repository"
+        default: "Veha0001/pmmp-droid"
+        required: true
+        type: string
+      benches:
+        description: "Benches string for checking out a specific tag"
+        required: true
+        type: string
+      publish-release:
+        description: "Publish the build as a release"
+        required: true
+        type: boolean
+
+jobs:
+  build-android:
+    name: Build PHP for Android-PM${{ inputs.pm-version }}
+    runs-on: ubuntu-22.04
+    env:
+      MUSL_DAT: https://github.com/${{ inputs.musl-repo }}/releases/download/toolchain/musl-cross-make-toolchain.tar.xz
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          repository: "pmmp/PHP-Binaries"
+          ref: ${{ inputs.benches }}
+
+      - name: Install tools and dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y make autoconf automake libtool libtool-bin m4 wget libc-bin gzip bzip2 bison g++ git re2c
+
+      - name: Download MUSL toolchain
+        run: |
+          wget -q $MUSL_DAT
+          sudo tar -xJf musl-cross-make-toolchain.tar.xz -C /usr/local
+          rm -rf musl-cross-make-toolchain.tar.xz
+      - name: Compile PHP for Android
+        run: |
+          set -ex
+          trap "exit 1" ERR
+          ./compile.sh -t android-aarch64 -x -g -j 4 -P ${{ inputs.pm-version }}
+
+      - name: Create tarball
+        run: |
+          tar -czf ./PHP-Android-aarch64-PM${{ inputs.pm-version }}.tar.gz bin
+
+      - name: Upload tarball as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PHP-Android-aarch64-PM${{ inputs.pm-version }}
+          path: ./PHP-Android-aarch64-PM${{ inputs.pm-version }}.tar.gz
+
+      - name: Publish Release
+        if: ${{ inputs['publish-release'] }}
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./PHP-Android-aarch64-PM${{ inputs.pm-version }}.tar.gz
+          name: PHP PM${{ inputs.pm-version }} (Build ${{ github.run_number }}) # Title for the release
+          tag_name: php-pm${{ inputs.pm-version }}-build-${{ github.run_number }} # Tag for the release
+          body: |
+            ## PHP PM${{ inputs.pm-version }} Release
+            This release includes the compiled PHP binaries for Android with PocketMine-MP version ${{ inputs.pm-version }}.
+            - Benchmarks used: ${{ inputs.benches }}
+            > [!NOTE]
+            > If you encounter the error `unexpected e_type: 2` in Termux, it's likely because you're using the Google Play version of the app. To fix this, install Termux from F-Droid or GitHub instead.
+            > Alternatively, you can use `proot-distro` to create a chroot-like environment where you can execute your programs without encountering this issue. This provides a sandboxed Linux distribution inside Termux.
+
+            ## Release Notes
+            - Built by: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            ### Warnings
+            If this is not the default branch, please be aware:
+            - :warning: **WARNING!** Some plugins might not work properly on this version yet. If you encounter issues, consider downloading the [recommended release](${{ github.server_url }}/${{ github.repository }}/releases/latest) instead.
+
+            - :white_check_mark: This version is recommended for production servers if it is the default branch.
+
+            :information_source: **Linux/MacOS users**: Please see [this page](https://doc.pmmp.io/en/rtfd/faq/installation/opcache.so.html) to fix extension loading errors. Also, check out the [PocketMine-MP Linux/MacOS installer](https://doc.pmmp.io/en/rtfd/installation/get-dot-pmmp-dot-io.html).
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

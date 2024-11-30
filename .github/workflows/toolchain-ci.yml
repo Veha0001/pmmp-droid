@@ -1,0 +1,71 @@
+name: Build musl-cross-make for Android
+
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      CFLAG: -march=x86-64 -Os
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: pmmp/musl-cross-make
+      - name: Set up dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential musl-tools gcc-aarch64-linux-gnu wget curl
+
+      - name: Cache Make
+        uses: actions/cache@v4
+        with:
+          path: |
+            build/
+            .make_cache/
+          key: ${{ runner.os }}-make-${{ hashFiles('**/Makefile') }}
+
+      - name: Create custom config.mak
+        run: |
+          cp config.mak.dist config.mak
+          echo 'OUTPUT="/opt/cross/"' >> config.mak
+          echo 'COMMON_CONFIG += CFLAGS="${{ env.CFLAG }}" CXXFLAGS="${{ env.CFLAG }}" ' >> config.mak
+
+      - name: Build musl-cross-make
+        run: make
+        continue-on-error: false
+
+      - name: Install musl-cross-make toolchain
+        run: sudo make install
+
+      - name: Create tarball of the toolchain
+        run: sudo tar -cJvf musl-cross-make-toolchain.tar.xz -C /opt/cross/ .
+
+      - name: Release tarball
+        uses: softprops/action-gh-release@v2
+        if: always()
+        with:
+          tag_name: "toolchain" # Use commit SHA as the tag name
+          files: musl-cross-make-toolchain.tar.xz # Change to .tar.xz
+          name: Release ${{ github.sha }}
+          body: |
+            # musl-cross-make Toolchain Release
+
+            ## Release Details
+            This release includes the latest build of the **musl-cross-make** toolchain for Android. It is designed for cross-compiling applications using the musl C library.
+
+            ### What's Included
+            - **Target:** aarch64-linux-musl
+            - **Output Directory:** The compiled toolchain is located in the `/opt/cross` directory.
+
+            ### Build Configuration
+            The build was configured with the following options:
+            - **Common Configurations:**
+              - Compiler optimizations:
+                - `CFLAGS="${{ env.CFLAG }}"`
+                - `CXXFLAGS="${{ env.CFLAG }}"`
+            ### Installation
+            To install the toolchain, use the following command:
+            ```bash
+            make install
+            ```
