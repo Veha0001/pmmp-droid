@@ -12,10 +12,6 @@ on:
         default: "Veha0001/pmmp-droid"
         required: true
         type: string
-      benches:
-        description: "Benches string for checking out a specific tag"
-        required: true
-        type: string
       publish-release:
         description: "Publish the build as a release"
         required: true
@@ -31,10 +27,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          repository: "pmmp/PHP-Binaries"
-          ref: ${{ inputs.benches }}
-
+      - run: gh repo clone pmmp/PHP-Binaries
       - name: Install tools and dependencies
         run: |
           sudo apt-get update
@@ -45,11 +38,12 @@ jobs:
           wget -q $MUSL_DAT
           sudo tar -xJf musl-cross-make-toolchain.tar.xz -C /usr/local
           rm -rf musl-cross-make-toolchain.tar.xz
+
       - name: Compile PHP for Android
         run: |
           set -ex
           trap "exit 1" ERR
-          ./compile.sh -t android-aarch64 -x -g -j 4 -P ${{ inputs.pm-version }}
+          ./PHP-Binaries/compile.sh -t android-aarch64 -x -g -j 4 -P ${{ inputs.pm-version }}
 
       - name: Create tarball
         run: |

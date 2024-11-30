@@ -10,8 +10,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          repository: pmmp/musl-cross-make
+      - run: gh repo clone pmmp/musl-cross-make
       - name: Set up dependencies
         run: |
           sudo apt-get update
@@ -30,13 +29,16 @@ jobs:
           cp config.mak.dist config.mak
           echo 'OUTPUT="/opt/cross/"' >> config.mak
           echo 'COMMON_CONFIG += CFLAGS="${{ env.CFLAG }}" CXXFLAGS="${{ env.CFLAG }}" ' >> config.mak
+        working-directory: musl-cross-make
 
       - name: Build musl-cross-make
         run: make
+        working-directory: musl-cross-make
         continue-on-error: false
 
       - name: Install musl-cross-make toolchain
-        run: sudo make install
+        run: sudo make Install
+        working-directory: musl-cross-make
 
       - name: Create tarball of the toolchain
         run: sudo tar -cJvf musl-cross-make-toolchain.tar.xz -C /opt/cross/ .
