@@ -37,7 +37,7 @@ jobs:
         continue-on-error: false
 
       - name: Install musl-cross-make toolchain
-        run: sudo make Install
+        run: sudo make install
         working-directory: musl-cross-make
 
       - name: Create tarball of the toolchain
