@@ -1,3 +1,9 @@
+# Repo
+musl-cross-make/
+PHP-Binaries/
+pmmp/
+pmmp-src/
+
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
