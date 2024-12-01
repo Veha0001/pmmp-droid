@@ -24,8 +24,9 @@ jobs:
           restore-keys: musl-cross-make-
       - name: Create custom config.mak
         run: |
-          cp config.mak.dist config.mak
-          echo 'OUTPUT="/opt/cross/"' >> config.mak
+          cp musl-cross-make/config.mak.dist musl-cross-make/config.mak
+          echo 'OUTPUT="/opt/cross/"' >> musl-cross-make/config.mak
+          echo 'COMMON_CONFIG += CFLAGS="${{ env.CFLAG }}" CXXFLAGS="${{ env.CFLAG }}" ' >> musl-cross-make/config.mak
 
       - name: Build musl-cross-make
         run: make -C musl-cross-make
