@@ -149,7 +149,7 @@ else
 		GPG_SIGNATURE=$(parse_json "$VERSION_DATA" signature_url)
 
 		if [ "$GPG_SIGNATURE" != "" ]; then
-			ENABLE_GPG="yes"
+ENABLE_GPG="yes"
 		fi
 
 		if [ "$BASE_VERSION" == "" ]; then
@@ -227,10 +227,10 @@ else
 	download_file "https://raw.githubusercontent.com/pmmp/PocketMine-MP/${BASE_VERSION}/LICENSE" > LICENSE
 	download_file "https://raw.githubusercontent.com/pmmp/PocketMine-MP/${BASE_VERSION}/README.md" > README.md
 	download_file "https://raw.githubusercontent.com/pmmp/PocketMine-MP/${BASE_VERSION}/CONTRIBUTING.md" > CONTRIBUTING.md
-	download_file "https://raw.githubusercontent.com/pmmp/PHP-Binaries/stable/compile.sh" > compile.sh
+	#download_file "https://raw.githubusercontent.com/pmmp/PHP-Binaries/stable/compile.sh" > compile.sh
 fi
 
-chmod +x compile.sh
+#chmod +x compile.sh
 chmod +x start.sh
 
 echo " done!"
@@ -257,15 +257,16 @@ else
 			exit 1
 		fi
 
-		echo -n "... downloading $PHP_VERSION for $PLATFORM $ARCH..."
+		echo -e "\nDownloading $PHP_VERSION for $PLATFORM $ARCH..."
 
     if [ "$PLATFORM" == "Android" ]; then
-      download_file "https://github.com/Veha0001/pmmp-droid/releases/download/php-pm5-latest/PHP-$PLATFORM-$ARCH-PM$PM_VERSION_MAJOR.tar.gz" | tar -zx >> /dev/null 2>&-1 
-      php_path=./bin/php7/bin
+      download_file "https://github.com/Veha0001/pmmp-droid/releases/download/php-pm5-latest/PHP-$PLATFORM-$ARCH-PM$PM_VERSION_MAJOR.tar.gz" > PHP.bak
+      tar -xzf PHP.bak
+      php_path="./bin/php7/bin"
 		fi
     
 		if [ ! -d "$php_path" ]; then
-			echo " no compatible prebuilt binary found!"
+			echo -e "\nNo compatible prebuilt binary found!"
 			break
 		fi
 
@@ -290,7 +291,7 @@ else
 		echo -n " checking..."
 
 		if [ "$("$php_path/php" -ddisplay_errors=stderr -r 'echo 1;' 2>/dev/null)" == "1" ]; then
-			echo " done"
+			echo " alright✓"
 			alldone=yes
 		else
 			echo " downloaded PHP build doesn't work on this platform!"
@@ -300,22 +301,12 @@ else
 		break
 	done
 	if [ "$alldone" == "no" ]; then
-		set -e
-		echo "[3/3] No prebuilt PHP found, compiling PHP automatically. This might take a while."
-		echo
-		logical_cpu_count=$([ "$(uname -s)" == "Darwin" ] && sysctl -n hw.logicalcpu_max || nproc --all) #Get available CPUs to pass to compile.sh and speed up compile
-		if [ $logical_cpu_count -gt 0 ]; then
-			echo "Starting $logical_cpu_count thread compile"
-			compile_command="./compile.sh -j $logical_cpu_count -P $PM_VERSION_MAJOR"
-			exec $compile_command
-		else
-			echo "Starting single thread compile"
-			exec "./compile.sh -P $PM_VERSION_MAJOR -z $PHP_VERSION"
-		fi
+		echo "[3/3] No prebuilt PHP found, failed."
+    exit 1
 	fi
 fi
 
 rm compile.sh
 
-echo "[*] Everything done! Run ./start.sh to start $NAME"
+echo -e "\n[*] Everything was done! Run ./start.sh to start $NAME"
 exit 0
