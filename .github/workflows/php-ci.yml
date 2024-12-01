@@ -65,6 +65,8 @@ jobs:
         if: ${{ inputs['publish-release'] }}
         uses: softprops/action-gh-release@v2
         with:
+          repository: Veha0001/pmmp-droid
+          make_latest: true
           files: ./PHP-Android-aarch64-PM${{ inputs.pm-version }}.tar.gz
           name: PHP ${{ inputs.php-version-base }} PM${{ inputs.pm-version }} (Build ${{ github.run_number }}) # Title for the release
           tag_name: php-pm${{ inputs.pm-version }}-build-${{ github.run_number }} # Tag for the release

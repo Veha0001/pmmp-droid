@@ -44,7 +44,11 @@ jobs:
       - name: Release tarball
         uses: softprops/action-gh-release@v2
         continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          repository: Veha0001/pmmp-droid
+          make_latest: false
           tag_name: "build-tc"
           files: musl-cross-make-toolchain.tar.xz
           name: musl-cross-make
