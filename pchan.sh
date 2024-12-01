@@ -259,7 +259,7 @@ else
 
 		echo -n "... downloading $PHP_VERSION for $PLATFORM $ARCH..."
 
-    if [ "$PLATFORM" != "Android" ]; then
+    if [ "$PLATFORM" == "Android" ]; then
       download_file "https://github.com/Veha0001/pmmp-droid/releases/download/php-pm5-latest/PHP-$PLATFORM-$ARCH-PM$PM_VERSION_MAJOR.tar.gz" | tar -zx >> /dev/null 2>&-1 
       php_path=./bin/php7/bin
 		fi
@@ -278,7 +278,15 @@ else
     if [[ "$(uname -o)" == *"Linux"* ]]; then
       sed -i -E "1 s@^#\!/data/data/com.termux/files/usr/bin/(.*)@#\!/bin/\1@" "$php_path/php-config"
     fi
-    
+
+    if [ "$PLATFORM" != "Windows" ]; then
+			EXTENSION_DIR=$(find "$(pwd)/bin" -name *debug-zts*) #make sure this only captures from `bin` in case the user renamed their old binary folder
+			#Modify extension_dir directive if it exists, otherwise add it
+			LF=$'\n'
+			grep -q '^extension_dir' "$php_path/php.ini" && sed -i'bak' "s{^extension_dir=.*{extension_dir=\"$EXTENSION_DIR\"{" "$php_path/php.ini" || sed -i'bak' "1s{^{extension_dir=\"$EXTENSION_DIR\"\\$LF{" "$php_path/php.ini"
+
+		fi
+
 		echo -n " checking..."
 
 		if [ "$("$php_path/php" -ddisplay_errors=stderr -r 'echo 1;' 2>/dev/null)" == "1" ]; then

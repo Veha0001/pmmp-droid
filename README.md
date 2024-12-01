@@ -13,5 +13,5 @@ This repository provides automated workflows to create PHP binaries compatible w
 ## Quick Install
 
 ```bash
-curl -sL https://raw.githubusercontent.com/Veha0001/pmmp-droid/refs/heads/main/pchan.sh | bash -s -
+curl -sL https://raw.githubusercontent.com/Veha0001/pmmp-droid/refs/heads/main/pchan.sh | bash -s - -
 ```
