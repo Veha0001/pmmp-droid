@@ -22,7 +22,7 @@ jobs:
     name: Build PHP for Android-PM${{ inputs.pm-version }}
     runs-on: ubuntu-22.04
     env:
-      MUSL_DAT: https://github.com/${{ inputs.musl-repo }}/releases/download/build-dev0/musl-cross-make-toolchain.tar.xz
+      MUSL_DAT: https://github.com/${{ inputs.musl-repo }}/releases/download/tc-v1/musl-cross-make-toolchain.tar.xz
 
     steps:
       - name: Checkout code

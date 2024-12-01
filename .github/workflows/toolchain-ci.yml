@@ -10,7 +10,8 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-      - run: git clone https://github.com/pmmp/musl-cross-make
+      - name: Clone pmmp/musl-cross-make repository
+        run: git clone https://github.com/pmmp/musl-cross-make
       - name: Set up dependencies
         run: |
           sudo apt-get update
@@ -22,6 +23,7 @@ jobs:
           path: musl-cross-make
           key: musl-cross-make-${{ hashFiles('musl-cross-make.hash') }}
           restore-keys: musl-cross-make-
+
       - name: Create custom config.mak
         run: |
           cp musl-cross-make/config.mak.dist musl-cross-make/config.mak
@@ -42,10 +44,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: build-dev0
+          tag_name: "tc-v1"
           files: musl-cross-make-toolchain.tar.xz
           name: musl-cross-make
-          token: ${{ env.GITHUB_TOKEN }}
           body: |
             # musl-cross-make Toolchain Release
 
