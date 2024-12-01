@@ -30,7 +30,6 @@ jobs:
 
       - name: Build musl-cross-make
         run: make -C musl-cross-make
-        working-directory: musl-cross-make
         continue-on-error: false
 
       - name: Install musl-cross-make toolchain
