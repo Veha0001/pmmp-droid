@@ -59,7 +59,7 @@ jobs:
 
             ## Release Details
             This release includes the latest build of the **musl-cross-make** toolchain for Android. It is designed for cross-compiling applications using the musl C library.
-            [![Build badge](https://img.shields.io/badge/Build-Action-lightgreen?style=for-the-badge&logo=githubactions&logoColor=white)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            [![Runner](https://img.shields.io/badge/Build-Action-lightgreen?style=for-the-badge&logo=githubactions&logoColor=white)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
             ### What's Included
             - **Target:** aarch64-linux-musl

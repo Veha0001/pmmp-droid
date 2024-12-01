@@ -83,11 +83,10 @@ jobs:
           tag_name: php-pm${{ inputs.pm-version }}-latest
           body: |
             ## PHP ${{ inputs.php-version-base }} PM${{ inputs.pm-version }} Release
-            This release includes the compiled PHP binaries for Android with PocketMine-MP version ${{ inputs.pm-version }}.
-            Last updated on **$(date -u +'%d %b %Y at %H:%M:%S %Z')**
+            This release includes the compiled PHP binaries for Android with **PocketMine-MP** version ${{ inputs.pm-version }}.x
 
             ## Release Notes
-            [![Action badge](https://img.shields.io/badge/Build-Action-lightgreen?style=for-the-badge&logo=githubactions&logoColor=white)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            [![Runner](https://img.shields.io/badge/Build-Action-lightgreen?style=for-the-badge&logo=githubactions&logoColor=white)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
             > [!NOTE]
             > If you see the error message `unexpected e_type: 2`, it's likely because you're using the Play Store version of Termux.
             > To fix this, run your program in proot-distro or switch to the F-Droid or GitHub version of Termux.
