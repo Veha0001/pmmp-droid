@@ -43,11 +43,12 @@ jobs:
 
       - name: Release tarball
         uses: softprops/action-gh-release@v2
-        if: always()
+        continue-on-error: true
         with:
           tag_name: "toolchain" # Use commit SHA as the tag name
           files: musl-cross-make-toolchain.tar.xz # Change to .tar.xz
           name: Release ${{ github.sha }}
+          token: ${{ env.GITHUB_TOKEN }}
           body: |
             # musl-cross-make Toolchain Release
 
