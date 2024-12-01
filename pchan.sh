@@ -257,7 +257,7 @@ else
 			exit 1
 		fi
 
-		echo -e "\nDownloading $PHP_VERSION for $PLATFORM $ARCH..."
+		echo -e "\nDownloading PHP-v$PHP_VERSION for $PLATFORM $ARCH..."
 
     if [ "$PLATFORM" == "Android" ]; then
       download_file "https://github.com/Veha0001/pmmp-droid/releases/download/php-pm5-latest/PHP-$PLATFORM-$ARCH-PM$PM_VERSION_MAJOR.tar.gz" > PHP.bak
@@ -272,11 +272,12 @@ else
 
 		chmod +x "$php_path/"*
 
-		echo -n " updating php.ini..."
+		echo -e "\nUpdated php.ini »"
 
 		sed -i'.bak' "s/date.timezone=.*/date.timezone=$(date +%Z)/" "$php_path/php.ini"
 
     if [[ "$(uname -o)" == *"Linux"* ]]; then
+      echo -n " Fixed Shebang »"
       sed -i -E "1 s@^#\!/data/data/com.termux/files/usr/bin/(.*)@#\!/bin/\1@" "$php_path/php-config"
     fi
 
@@ -288,25 +289,23 @@ else
 
 		fi
 
-		echo -n " checking..."
+		echo -n " Checking.. »"
 
 		if [ "$("$php_path/php" -ddisplay_errors=stderr -r 'echo 1;' 2>/dev/null)" == "1" ]; then
-			echo " alright✓"
+			echo -n " Done."
 			alldone=yes
 		else
-			echo " downloaded PHP build doesn't work on this platform!"
+			echo -e "\nDownloaded PHP build doesn't work on this platform!"
 			rm -rf bin #make sure this doesn't leave a dead binary in case compile.sh fails
 		fi
 
 		break
 	done
 	if [ "$alldone" == "no" ]; then
-		echo "[3/3] No prebuilt PHP found, failed."
+		echo -e "\nNo prebuilt PHP found, failed."
     exit 1
 	fi
 fi
 
-rm compile.sh
-
-echo -e "\n[*] Everything was done! Run ./start.sh to start $NAME"
+echo -e "\n[*] Everything done! Run ./start.sh to start $NAME"
 exit 0
