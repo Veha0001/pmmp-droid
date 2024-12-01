@@ -9,3 +9,9 @@ GitHub Actions workflows to build PHP binaries for PocketMine-MP on Termux (Andr
 ## About
 
 This repository provides automated workflows to create PHP binaries compatible with [PocketMine-MP](https://pmmp.io/), enabling Minecraft server hosting on Android devices using Termux.
+
+## Quick Install
+
+```bash
+curl -sL https://raw.githubusercontent.com/Veha0001/pmmp-droid/refs/heads/main/pchan.sh | bash -s -
+```
