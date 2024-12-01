@@ -17,13 +17,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential musl-tools gcc-aarch64-linux-gnu wget curl
 
-      - name: Cache Sources
+      - name: Cache Makefile
         uses: actions/cache@v4
         with:
-          path: sources
-          key: ${{ runner.os }}-sources_tc-${{ hashFiles('hashes/*.sha1') }}
+          path: |
+            sources
+            build
+          key: ${{ runner.os }}-make_tc-${{ hashFiles('Makefile') }}
           restore-keys: |
-            ${{ runner.os }}-sources_tc-
+            ${{ runner.os }}-make_tc-
 
       - name: Create custom config.mak
         run: |
