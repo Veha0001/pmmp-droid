@@ -22,12 +22,13 @@ jobs:
     name: Build PHP for Android-PM${{ inputs.pm-version }}
     runs-on: ubuntu-22.04
     env:
-      MUSL_DAT: https://github.com/${{ inputs.musl-repo }}/releases/download/tc-v1/musl-cross-make-toolchain.tar.xz
+      MUSL_DAT: https://github.com/${{ inputs.musl-repo }}/releases/download/build-tc/musl-cross-make-toolchain.tar.xz
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - run: git clone https://github.com/pmmp/PHP-Binaries
+      - name: Clone pmmp/PHP-Binaries repository
+        run: git clone https://github.com/pmmp/PHP-Binaries
       - name: Install tools and dependencies
         run: |
           sudo apt-get update

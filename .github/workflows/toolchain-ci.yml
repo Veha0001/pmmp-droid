@@ -7,7 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CFLAG: -march=x86-64 -Os
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - name: Clone pmmp/musl-cross-make repository
@@ -44,7 +43,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: "tc-v1"
+          tag_name: "build-tc"
           files: musl-cross-make-toolchain.tar.xz
           name: musl-cross-make
           body: |
