@@ -266,13 +266,13 @@ else
 		fi
     
 		if [ ! -d "$php_path" ]; then
-			echo -e "\nNo compatible prebuilt binary found!"
+			echo "No compatible prebuilt binary found!"
 			break
 		fi
 
 		chmod +x "$php_path/"*
 
-		echo -e "\nUpdated php.ini »"
+		echo -n "Updated php.ini »"
 
 		sed -i'.bak' "s/date.timezone=.*/date.timezone=$(date +%Z)/" "$php_path/php.ini"
 
