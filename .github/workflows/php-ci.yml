@@ -3,6 +3,11 @@ name: Build and Publish PHP Binaries for Android
 on:
   workflow_dispatch:
     inputs:
+      php-version-base:
+        description: "PHP base version"
+        default: "8.2"
+        required: true
+        type: string
       pm-version:
         description: "Major PocketMine-MP version specified (can be 4 or 5)"
         required: true
@@ -19,16 +24,16 @@ on:
 
 jobs:
   build-android:
-    name: Build PHP for Android-PM${{ inputs.pm-version }}
-    runs-on: ubuntu-22.04
+    name: Build PHP ${{ inputs.php-version-base }} for Android-PM${{ inputs.pm-version }}
+    runs-on: ubuntu-latest
     env:
       MUSL_DAT: https://github.com/${{ inputs.musl-repo }}/releases/download/build-tc/musl-cross-make-toolchain.tar.xz
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Clone pmmp/PHP-Binaries repository
-        run: git clone https://github.com/pmmp/PHP-Binaries
+        with:
+          repository: "pmmp/PHP-Binaries"
       - name: Install tools and dependencies
         run: |
           sudo apt-get update
@@ -44,7 +49,7 @@ jobs:
         run: |
           set -ex
           trap "exit 1" ERR
-          ./PHP-Binaries/compile.sh -t android-aarch64 -x -g -j 4 -P ${{ inputs.pm-version }}
+          ./compile.sh -t android-aarch64 -x -g -j 4 -P ${{ inputs.pm-version }} -z ${{ inputs.php-version-base }}
 
       - name: Create tarball
         run: |
@@ -61,7 +66,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: ./PHP-Android-aarch64-PM${{ inputs.pm-version }}.tar.gz
-          name: PHP PM${{ inputs.pm-version }} (Build ${{ github.run_number }}) # Title for the release
+          name: PHP ${{ inputs.php-version-base }} PM${{ inputs.pm-version }} (Build ${{ github.run_number }}) # Title for the release
           tag_name: php-pm${{ inputs.pm-version }}-build-${{ github.run_number }} # Tag for the release
           body: |
             ## PHP PM${{ inputs.pm-version }} Release

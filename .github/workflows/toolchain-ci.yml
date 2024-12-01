@@ -9,32 +9,34 @@ jobs:
       CFLAG: -march=x86-64 -Os
     steps:
       - uses: actions/checkout@v4
-      - name: Clone pmmp/musl-cross-make repository
-        run: git clone https://github.com/pmmp/musl-cross-make
+        with:
+          repository: "pmmp/musl-cross-make"
+
       - name: Set up dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential musl-tools gcc-aarch64-linux-gnu wget curl
 
-      - name: Cache Make
+      - name: Cache Sources
         uses: actions/cache@v4
         with:
-          path: musl-cross-make
-          key: musl-cross-make-${{ hashFiles('musl-cross-make.hash') }}
-          restore-keys: musl-cross-make-
+          path: sources
+          key: ${{ runner.os }}-sources_tc-${{ hashFiles('hashes/*.sha1') }}
+          restore-keys: |
+            ${{ runner.os }}-sources_tc-
 
       - name: Create custom config.mak
         run: |
-          cp musl-cross-make/config.mak.dist musl-cross-make/config.mak
-          echo 'OUTPUT="/opt/cross/"' >> musl-cross-make/config.mak
-          echo 'COMMON_CONFIG += CFLAGS="${{ env.CFLAG }}" CXXFLAGS="${{ env.CFLAG }}" ' >> musl-cross-make/config.mak
+          cp config.mak.dist config.mak
+          echo 'OUTPUT="/opt/cross/"' >> config.mak
+          echo 'COMMON_CONFIG += CFLAGS="${}" CXXFLAGS="${{ env.CFLAG }}" ' >> config.mak
 
       - name: Build musl-cross-make
-        run: make -C musl-cross-make
+        run: make
         continue-on-error: false
 
       - name: Install musl-cross-make toolchain
-        run: sudo make install -C musl-cross-make
+        run: sudo make install
 
       - name: Create tarball of the toolchain
         run: sudo tar -cJvf musl-cross-make-toolchain.tar.xz -C /opt/cross/ .
