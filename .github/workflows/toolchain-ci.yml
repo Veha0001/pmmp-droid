@@ -42,15 +42,16 @@ jobs:
         uses: softprops/action-gh-release@v2
         continue-on-error: true
         with:
-          tag_name: "toolchain" # Use commit SHA as the tag name
-          files: musl-cross-make-toolchain.tar.xz # Change to .tar.xz
-          name: Release ${{ github.sha }}
+          tag_name: build-dev0
+          files: musl-cross-make-toolchain.tar.xz
+          name: musl-cross-make
           token: ${{ env.GITHUB_TOKEN }}
           body: |
             # musl-cross-make Toolchain Release
 
             ## Release Details
             This release includes the latest build of the **musl-cross-make** toolchain for Android. It is designed for cross-compiling applications using the musl C library.
+            [![Build badge](https://img.shields.io/badge/Build-Action-lightgreen?style=for-the-badge&logo=githubactions&logoColor=white)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
             ### What's Included
             - **Target:** aarch64-linux-musl
