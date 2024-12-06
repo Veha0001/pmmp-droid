@@ -278,7 +278,7 @@ else
 
     if [[ "$(uname -o)" == *"Linux"* ]]; then
       echo -n " Fixed Shebang »"
-      sed -i -E "1 s@^#\!/data/data/com.termux/files/usr/bin/(.*)@#\!/bin/\1@" "$php_path/php-config"
+      sed -i '1s|^#!/.*|#!/usr/bin/env bash|' "$php_path/php-config"
     fi
 
     if [ "$PLATFORM" != "Windows" ]; then
