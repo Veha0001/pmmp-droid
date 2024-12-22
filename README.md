@@ -6,17 +6,17 @@
 
 GitHub Actions workflows to build PHP Binaries for PocketMine-MP on Termux (Android).
 
-## News
+## ✨ News
+You can now download prebuilt PHP binaries for Android directly from the [pmmp GitHub repository](https://github.com/pmmp/PHP-Binaries).
 
-Now you can also download the PHP Binaries for Android from the [pmmp Github](https://github.com/pmmp/PHP-Binaries).
-
-## About
+## 📖 About
 
 This repository provides automated workflows to create PHP binaries compatible with [PocketMine-MP](https://pmmp.io/), enabling Minecraft server hosting on Android devices using Termux.
 
-## Quick Run
+## 🚀 Quick Start
 
+Run the following command to download and execute the script in one step:
 ```bash
-alias pmmpio="curl -sL https://raw.githubusercontent.com/Veha0001/pmmp-droid/refs/heads/main/pchan.sh | bash -s -"
-pmmpio
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Veha0001/pmmp-droid/main/pchan.sh)"
 ```
+This command ensures that the script is fetched and executed securely.
