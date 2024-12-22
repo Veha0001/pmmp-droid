@@ -64,6 +64,11 @@ jobs:
         run: |
           tar -czf ./PHP-Android-aarch64-PM${{ inputs.pm-version }}.tar.gz bin
 
+      - name: Get date
+        id: date
+        run: |
+          echo DATE=$(date -u +'%d %b %Y') >> $GITHUB_OUTPUT
+
       - uses: actions/upload-artifact@v4
         with:
           name: PHP-Android-aarch64-PM${{ inputs.pm-version }}
@@ -85,7 +90,7 @@ jobs:
             ## PHP ${{ inputs.php-version-base }} PM${{ inputs.pm-version }} Release
             This release includes the compiled PHP binaries for Android with **PocketMine-MP** version ${{ inputs.pm-version }}.x
 
-            **Release Date:** ${{ github.event.inputs.publish-release | date('dd/MM/yyyy') }}
+            **Release Date:** ${{ steps.date.outputs.DATE }}
 
             **Build Command Used:**
             ```bash
