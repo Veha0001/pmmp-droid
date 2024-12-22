@@ -295,7 +295,8 @@ else
 			echo -n " Done."
 			alldone=yes
 		else
-			echo -e "\nDownloaded PHP build doesn't work on this platform!"
+			echo -e "\nDownloaded PHP build cannot run on this platform!"
+      echo -e "\nPlease try to running this script inside a proot-distro."
 			rm -rf bin #make sure this doesn't leave a dead binary in case compile.sh fails
 		fi
 

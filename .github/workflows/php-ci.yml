@@ -85,6 +85,13 @@ jobs:
             ## PHP ${{ inputs.php-version-base }} PM${{ inputs.pm-version }} Release
             This release includes the compiled PHP binaries for Android with **PocketMine-MP** version ${{ inputs.pm-version }}.x
 
+            **Release Date:** ${{ github.event.inputs.publish-release | date('dd/MM/yyyy') }}
+
+            **Build Command Used:**
+            ```bash
+            ./compile.sh -t android-aarch64 -x -g -j 4 -P ${{ inputs.pm-version }} ${{ inputs.pipeflags }}
+            ```
+
             ## Release Notes
             [![Runner](https://img.shields.io/badge/Build-Action-lightgreen?style=for-the-badge&logo=githubactions&logoColor=white)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
             > [!NOTE]
