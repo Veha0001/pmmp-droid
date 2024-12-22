@@ -20,3 +20,25 @@ Run the following command to download and execute the script in one step:
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Veha0001/pmmp-droid/main/pchan.sh)"
 ```
 This command ensures that the script is fetched and executed securely.
+
+**Running as Root**:
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Veha0001/pmmp-droid/main/pchan.sh)" -- -r
+```
+### 🛠️ Options
+
+`-a`: Use an alternate URL.
+
+`-r`: Skip root check.
+
+`-u`: Trigger update.
+
+`-c`: Force compile.
+
+`-d <dir>`: Set install directory.
+
+`-i`: Ignore SSL certificates.
+
+`-v <channel>`: Set update channel.
+
+`-t <url>`: Set custom build URL.
