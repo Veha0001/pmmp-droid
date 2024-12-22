@@ -24,7 +24,7 @@ on:
 jobs:
   build-android:
     name: Build PHP PM${{ inputs.pm-version }} for Android
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       MUSL_DAT: https://github.com/${{ inputs.musl-repo }}/releases/download/build-tc/musl-cross-make-toolchain.tar.xz
 
