@@ -58,7 +58,8 @@ jobs:
             # musl-cross-make Toolchain Release
 
             ## Release Details
-            [![Runner](https://img.shields.io/badge/Build-Action-lightgreen?style=for-the-badge&logo=githubactions&logoColor=white)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            [![Runner](https://img.shields.io/badge/Build-Workflow-black?style=for-the-badge&logo=cplusplusbuilder&logoColor=%23eff1f5&labelColor=%2340a02b&color=%235c5f77)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
             This release includes the latest build of the **musl-cross-make** toolchain for Android. It is designed for cross-compiling applications using the musl C library.
 
             ### What's Included
@@ -71,8 +72,4 @@ jobs:
               - Compiler optimizations:
                 - `CFLAGS="${{ env.CFLAG }}"`
                 - `CXXFLAGS="${{ env.CFLAG }}"`
-            ### Installation
-            To install the toolchain, use the following command:
-            ```bash
-            make install
-            ```
+

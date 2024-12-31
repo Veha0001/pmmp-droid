@@ -98,11 +98,12 @@ jobs:
             ```
 
             ## Release Notes
-            [![Runner](https://img.shields.io/badge/Build-Action-lightgreen?style=for-the-badge&logo=githubactions&logoColor=white)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            [![Runner](https://img.shields.io/badge/Build-Workflow-black?style=for-the-badge&logo=cplusplusbuilder&logoColor=%23eff1f5&labelColor=%2340a02b&color=%235c5f77)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            
             > [!NOTE]
-            > If you see the error message `unexpected e_type: 2`, it's likely because you're using the Play Store version of Termux.
-            > To fix this, run your program in proot-distro or switch to the F-Droid or GitHub version of Termux.
-
+            > If you see the error message `unexpected e_type: 2`, it's likely because you're using the **Play Store** version of Termux.
+            > To fix this, use **proot-distro** or switch to the F-Droid or GitHub version of Termux.
+            
             :information_source: **Linux/MacOS users**: Please see [this page](https://doc.pmmp.io/en/rtfd/faq/installation/opcache.so.html) to fix extension loading errors. Also, check out the [PocketMine-MP Linux/MacOS installer](https://doc.pmmp.io/en/rtfd/installation/get-dot-pmmp-dot-io.html).
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
