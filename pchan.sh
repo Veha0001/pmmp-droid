@@ -247,21 +247,31 @@ else
 	while [ "$forcecompile" == "off" ]
 	do
 		rm -r -f bin/ >> /dev/null 2>&1
-		ARCH="$(uname -m)"
-		EXTENSION=".tar.gz"
 
-    if [[ "$ARCH" == "aarch64" ]]; then
-      PLATFORM="Android"
+		if [[ "$(uname -m)" == "aarch64" ]]; then
+  		PLATFORM="Android"
+  		ARCH="arm64"
 		else
-      echo -e "\n[Error] Unsupport platfrom.\n + For install on other platfrom should run: \n  curl -sL https://get.pmmp.io | bash -s - "
+  		echo -e "\n[Error] Unsupported platform detected."
+  		echo -e "  Supported platforms include:"
+  		echo -e "    - Android (aarch64/arm64)"
+  		echo -e "\nTo install on other platforms, use the official installer:"
+  		echo -e "  curl -sL https://get.pmmp.io | bash -s -"
+  		exit 1
+		fi
+		if [[ "$TERMUX_VERSION" =~ ^googleplay ]]; then
+			echo -e "\n[ERROR] This is the Termux Google Play version, which cannot run the prebuilt PHP binaries."
+			echo -e "Please try running this script again inside a proot-distro."
 			exit 1
 		fi
 
-		echo -e "\nDownloading PHP-v$PHP_VERSION for $PLATFORM $ARCH..."
+		ARCHIVE_OUTPUT="PHP-$PLATFORM-$ARCH-PM$PM_VERSION_MAJOR.tar.gz"
+		echo -e "\nDownloading PHP-Binaries to .cache/$ARCHIVE_OUTPUT"
 
     if [ "$PLATFORM" == "Android" ]; then
-      download_file "https://github.com/Veha0001/pmmp-droid/releases/download/php-pm5-latest/PHP-$PLATFORM-$ARCH-PM$PM_VERSION_MAJOR.tar.gz" > PHP.bak
-      tar -xzf PHP.bak
+    	mkdir -p .cache
+      download_file "https://github.com/pmmp/PHP-Binaries/releases/download/pm$PM_VERSION_MAJOR-php-$PHP_VERSION-latest/$ARCHIVE_OUTPUT" > .cache/$ARCHIVE_OUTPUT
+      tar -xzf .cache/$ARCHIVE_OUTPUT
       php_path="./bin/php7/bin"
 		fi
     
@@ -276,9 +286,9 @@ else
 
 		sed -i'.bak' "s/date.timezone=.*/date.timezone=$(date +%Z)/" "$php_path/php.ini"
 
-    if [[ "$(uname -o)" == *"Linux"* ]]; then
+    if [[ -n "$TERMUX_VERSION" ]]; then
+    	sed -i -E "1 s@^#\!(.*)/[sx]?bin/(.*)@#\!/data/data/com.termux/files/usr/bin/\2@" "$php_path/php-config"
       echo -n " Fixed Shebang »"
-      sed -i '1s|^#!/.*|#!/usr/bin/env bash|' "$php_path/php-config"
     fi
 
     if [ "$PLATFORM" != "Windows" ]; then

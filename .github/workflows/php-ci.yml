@@ -11,9 +11,9 @@ on:
         description: "Major PocketMine-MP version specified (can be 4 or 5)"
         required: true
         type: string
-      musl-repo:
-        description: "musl-cross-make repository"
-        default: "Veha0001/pmmp-droid"
+      musl-url:
+        description: "musl-cross-make.tar.xz url "
+        default: "https://github.com/Veha0001/pmmp-droid/releases/download/build-tc/musl-cross-make-toolchain.tar.xz"
         required: true
         type: string
       publish-release:
@@ -24,51 +24,32 @@ on:
 jobs:
   build-android:
     name: Build PHP PM${{ inputs.pm-version }} for Android
-    runs-on: ubuntu-22.04
-    env:
-      MUSL_DAT: https://github.com/${{ inputs.musl-repo }}/releases/download/build-tc/musl-cross-make-toolchain.tar.xz
-
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           repository: "pmmp/PHP-Binaries"
 
-      - name: Prepare compile.sh download cache
-        id: download-cache
-        uses: actions/cache@v4
-        with:
-          path: ./download_cache
-          key: compile-sh-cache-ssl-https-${{ hashFiles('./compile.sh') }}
-          restore-keys: compile-sh-cache-ssl-https-
-
-      - name: Install tools and dependencies
+      - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y make autoconf automake libtool libtool-bin m4 wget libc-bin gzip bzip2 bison g++ git re2c
 
-      - name: Download MUSL toolchain
+      - name: Install Musl Cross Make
         run: |
           wget -q $MUSL_DAT
           sudo tar -xJf musl-cross-make-toolchain.tar.xz -C /usr/local
           rm -rf musl-cross-make-toolchain.tar.xz
-          
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: termux/package-builder:latest
-        
-      - name: Compile PHP for Android
+
+      - name: Compile PHP
         run: |
           set -ex
           trap "exit 1" ERR
           ./compile.sh -t android-aarch64 -x -g -j 4 -P ${{ inputs.pm-version }} ${{ inputs.pipeflags }}
-          sed -i -E "1 s@^#\!(.*)/[sx]?bin/(.*)@#!\/data\/data\/com.termux\/files\/bin/\2@" bin/php7/bin/php-config
 
       - name: Create tarball
-        run: |
-          tar -czf ./PHP-Android-aarch64-PM${{ inputs.pm-version }}.tar.gz bin
+        run: tar -czf ./PHP-Android-aarch64-PM${{ inputs.pm-version }}.tar.gz bin
 
       - name: Get date
         id: date

@@ -3,6 +3,7 @@ musl-cross-make/
 PHP-Binaries/
 pmmp/
 pmmp-src/
+tests/
 
 ## PocketMine-MP
 players/*

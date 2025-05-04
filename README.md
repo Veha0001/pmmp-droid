@@ -1,4 +1,4 @@
-# pmmp-droid
+# PMMP DORID
 
 [![GitHub Release](https://img.shields.io/github/v/release/Veha0001/pmmp-droid?sort=date&display_name=release&style=for-the-badge&logo=git&logoColor=%239399b2&label=Download&labelColor=%231e1e2e&color=%23f38ba8)](https://github.com/Veha0001/pmmp-droid/releases)
 [![Workflows Folder](https://img.shields.io/badge/Workflows-Folder-cyan?style=for-the-badge&logo=github-actions&logoColor=%23FFFAFF&labelColor=%23303036&color=%2330BCED)](.github/workflows)
