@@ -198,6 +198,11 @@ elif [ "$GPG_SIGNATURE" == "" ]; then
 		echo "[-] This channel should have a signature, none found"
 	fi
 fi
+if [[ "$TERMUX_VERSION" =~ ^googleplay ]]; then
+	echo -e "\n[ERROR] This is the Termux Google Play version, which cannot run the prebuilt PHP binaries."
+	echo -e "Please try running this script again inside a proot-distro."
+	exit 1
+fi
 
 echo "[*] Installing/updating $NAME on directory $INSTALL_DIRECTORY"
 mkdir -m 0777 "$INSTALL_DIRECTORY" 2> /dev/null
@@ -259,13 +264,8 @@ else
   		echo -e "  curl -sL https://get.pmmp.io | bash -s -"
   		exit 1
 		fi
-		if [[ "$TERMUX_VERSION" =~ ^googleplay ]]; then
-			echo -e "\n[ERROR] This is the Termux Google Play version, which cannot run the prebuilt PHP binaries."
-			echo -e "Please try running this script again inside a proot-distro."
-			exit 1
-		fi
-
-		ARCHIVE_OUTPUT="PHP-$PLATFORM-$ARCH-PM$PM_VERSION_MAJOR.tar.gz"
+		
+		ARCHIVE_OUTPUT="PHP-$PHP_VERSION-$PLATFORM-$ARCH-PM$PM_VERSION_MAJOR.tar.gz"
 		echo -e "\nDownloading PHP-Binaries to .cache/$ARCHIVE_OUTPUT"
 
     if [ "$PLATFORM" == "Android" ]; then
