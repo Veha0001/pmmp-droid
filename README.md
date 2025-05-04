@@ -25,6 +25,7 @@ This command ensures that the script is fetched and executed securely.
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Veha0001/pmmp-droid/main/pchan.sh)" -- -r
 ```
+
 ### 🛠️ Options
 
 `-a`: Use an alternate URL.
@@ -39,6 +40,6 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Veha0001/pmmp-droid/main
 
 `-i`: Ignore SSL certificates.
 
-`-v <channel>`: Set update channel.
+`-v <channel: stable, beta, pm3..>`: Set update channel.
 
 `-t <url>`: Set custom build URL.

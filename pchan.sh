@@ -258,7 +258,7 @@ else
   		ARCH="arm64"
 		else
   		echo -e "\n[Error] Unsupported platform detected."
-  		echo -e "  Supported platforms include:"
+  		echo -e "  Supported platform: "
   		echo -e "    - Android (aarch64/arm64)"
   		echo -e "\nTo install on other platforms, use the official installer:"
   		echo -e "  curl -sL https://get.pmmp.io | bash -s -"
@@ -266,15 +266,17 @@ else
 		fi
 		
 		ARCHIVE_OUTPUT="PHP-$PHP_VERSION-$PLATFORM-$ARCH-PM$PM_VERSION_MAJOR.tar.gz"
-		echo -e "\nDownloading PHP-Binaries to .cache/$ARCHIVE_OUTPUT"
-
+		echo -ne "\n[*] Downloading PHP-Binaries to .cache/$ARCHIVE_OUTPUT "
+		
     if [ "$PLATFORM" == "Android" ]; then
     	mkdir -p .cache
       download_file "https://github.com/pmmp/PHP-Binaries/releases/download/pm$PM_VERSION_MAJOR-php-$PHP_VERSION-latest/$ARCHIVE_OUTPUT" > .cache/$ARCHIVE_OUTPUT
+      echo -ne "» Extracting.. "
       tar -xzf .cache/$ARCHIVE_OUTPUT
+      echo -ne "» Ok.\n"
       php_path="./bin/php7/bin"
 		fi
-    
+
 		if [ ! -d "$php_path" ]; then
 			echo "No compatible prebuilt binary found!"
 			break
@@ -282,7 +284,7 @@ else
 
 		chmod +x "$php_path/"*
 
-		echo -n "Updated php.ini »"
+		echo -n "[*] Updated php.ini » "
 
 		sed -i'.bak' "s/date.timezone=.*/date.timezone=$(date +%Z)/" "$php_path/php.ini"
 
@@ -299,10 +301,10 @@ else
 
 		fi
 
-		echo -n " Checking.. »"
+		echo -n "Checking.. » "
 
 		if [ "$("$php_path/php" -ddisplay_errors=stderr -r 'echo 1;' 2>/dev/null)" == "1" ]; then
-			echo -n " Done."
+			echo -n "Ok."
 			alldone=yes
 		else
 			echo -e "\nDownloaded PHP build cannot run on this platform!"
