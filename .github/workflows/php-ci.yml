@@ -52,8 +52,12 @@ jobs:
           wget -q $MUSL_DAT
           sudo tar -xJf musl-cross-make-toolchain.tar.xz -C /usr/local
           rm -rf musl-cross-make-toolchain.tar.xz
-      - name: Setup Termux
-        run: curl -SLs https://raw.githubusercontent.com/termux/termux-packages/refs/heads/master/scripts/setup-ubuntu.sh | bash
+          
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: termux/package-builder:latest
         
       - name: Compile PHP for Android
         run: |
